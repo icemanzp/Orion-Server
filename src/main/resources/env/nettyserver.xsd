@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.wangfujing.com/nettyserver"
+	xmlns:tns="http://www.wangfujing.com/nettyserver" elementFormDefault="qualified">
+	
+	<simpleType name="servlet-suffix">
+		<restriction base="string">
+			<pattern value="(/?[*]?[a-z0-9A-Z_]*/?[*]?[.]?[a-z0-9A-Z_]*[$]?[,]?)*" />
+		</restriction>
+	</simpleType>
+	<simpleType name="server-path-type">
+		<restriction base="string">
+			<pattern value="((([0-9]{1,3}([:][0-9]{1,5})?[.]?){4})[,]?)*" />
+		</restriction>
+	</simpleType>
+	<simpleType name="config-path">
+		<restriction base="string">
+			<pattern value="([a-z0-9A-Z_]|[_,-])*/" />
+		</restriction>
+	</simpleType>
+	<simpleType name="splitByOpt">
+		<restriction base="string">
+			<pattern value="(([a-z0-9A-Z_]|[_,-])*[,]?)*" />
+		</restriction>
+	</simpleType>
+	
+	<element name="netty-server-info">
+		<complexType>
+			<sequence>
+				<element name="base-info">
+					<complexType>
+						<sequence>
+							<element name="server-name" type="string" />
+							<element name="server-root" type="string" />
+							<element name="server-code" type="string" />
+							<element name="server-desc" type="string" />
+							<element name="max-income-thread-count" type="integer" />
+							<element name="ssh-info">
+								<complexType>
+									<sequence>
+										<element name="keystore-path" type="string"/>
+										<element name="keystore-passwd" type="string"/>
+										<element name="keystore-certpasswd" type="string"/>
+									</sequence>
+									<attribute name="isSSL" type="boolean"/>
+									<attribute name="needClientAuth" type="boolean" />
+								</complexType>
+							</element>
+							<element name="base-params">
+								<complexType>
+									<sequence>
+										<element name="param"  maxOccurs="unbounded">
+											<complexType>
+												<attribute name="param-name" type="string" use="required"/>
+												<attribute name="param-value" type="string" use="required"/>
+											</complexType>
+										</element>
+									</sequence>
+								</complexType>
+							</element>
+						</sequence>
+					</complexType>
+				</element>
+				<element name="listener-infos">
+					<complexType>
+						<sequence>
+							<element name="listener" maxOccurs="unbounded">
+								<complexType>
+									<attribute name="listener-class" type="string" use="required"/>
+								</complexType>
+							</element>
+						</sequence>
+					</complexType>
+				</element>
+				<element name="filter-infos">
+					<complexType>
+						<sequence>
+							<element name="filter" maxOccurs="unbounded">
+								<complexType>
+									<sequence>
+										<element name="init-param" maxOccurs="unbounded">
+											<complexType>
+												<attribute name="param-name" type="string" use="required"/>
+												<attribute name="param-value" type="string" use="required"/>
+											</complexType>
+										</element>
+										<element name="filter-mapping" >
+											<complexType>
+												<sequence>
+													<element name="dispatcher" maxOccurs="unbounded">
+														<simpleType>
+															<restriction base="string">
+																<enumeration value="REQUEST" />
+																<enumeration value="INCLUDE" />
+																<enumeration value="FORWARD"/>
+																<enumeration value="ERROR"/>
+															</restriction>
+														</simpleType>
+													</element>
+												</sequence>
+												<attribute name="url-pattern" type="tns:servlet-suffix" />
+												<attribute name="servlet-name" type="tns:splitByOpt" />
+											</complexType>
+										</element>
+									</sequence>
+									<attribute name="filter-class" type="string" use="required" />
+									<attribute name="filter-name" type="string" use="required" />
+								</complexType>
+							</element>
+						</sequence>
+						<attribute name="onStartup" type="boolean" default="false" />
+					</complexType>
+				</element>
+				<element name="dispather-infos">
+					<complexType>
+						<sequence>
+							<element name="servlet" maxOccurs="unbounded">
+								<complexType>
+									<sequence>
+										<element name="init-param" maxOccurs="unbounded">
+											<complexType>
+												<attribute name="param-name" type="string" use="required" />
+												<attribute name="param-value" type="string" use="required" />
+											</complexType>
+										</element>
+									</sequence>
+									<attribute name="servlet-class" type="string" use="required"/>
+									<attribute name="servlet-name" type="string" use="required" />
+									<attribute name="servlet-suffix" type="tns:servlet-suffix" use="required" />
+								</complexType>
+							</element>
+						</sequence>
+					</complexType>
+				</element>
+				
+			</sequence>
+		</complexType>
+	</element>
+</schema>
