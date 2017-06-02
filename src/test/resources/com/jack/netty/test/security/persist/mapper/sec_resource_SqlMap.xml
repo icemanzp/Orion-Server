@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper  
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="sec_resource">
+	<resultMap id="BaseResultMap" type="com.jack.netty.test.security.entity.Resource">
+		<result column="id" property="id" jdbcType="BIGINT" />
+		<result column="res_key" property="resKey" jdbcType="VARCHAR" />
+		<result column="res_desc" property="resDesc" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, res_key, res_desc
+	</sql>
+	<!-- <sql id="Example_Where_Clause" > <iterate property="oredCriteria" conjunction="or" 
+		prepend="where" removeFirstPrepend="iterate" > <isEqual property="oredCriteria[].valid" 
+		compareValue="true" > ( <iterate prepend="and" property="oredCriteria[].criteriaWithoutValue" 
+		conjunction="and" > $oredCriteria[].criteriaWithoutValue[]$ </iterate> <iterate 
+		prepend="and" property="oredCriteria[].criteriaWithSingleValue" conjunction="and" 
+		> $oredCriteria[].criteriaWithSingleValue[].condition$ #oredCriteria[].criteriaWithSingleValue[].value# 
+		</iterate> <iterate prepend="and" property="oredCriteria[].criteriaWithListValue" 
+		conjunction="and" > $oredCriteria[].criteriaWithListValue[].condition$ <iterate 
+		property="oredCriteria[].criteriaWithListValue[].values" open="(" close=")" 
+		conjunction="," > #oredCriteria[].criteriaWithListValue[].values[]# </iterate> 
+		</iterate> <iterate prepend="and" property="oredCriteria[].criteriaWithBetweenValue" 
+		conjunction="and" > $oredCriteria[].criteriaWithBetweenValue[].condition$ 
+		#oredCriteria[].criteriaWithBetweenValue[].values[0]# and #oredCriteria[].criteriaWithBetweenValue[].values[1]# 
+		</iterate> ) </isEqual> </iterate> </sql> <select id="selectByExample" resultMap="BaseResultMap" 
+		parameterClass="com.wfj.security.entity.ResourceExample" > select <isParameterPresent 
+		> <isEqual property="distinct" compareValue="true" > distinct </isEqual> 
+		</isParameterPresent> <include refid="sec_resource.Base_Column_List" /> from 
+		sec_resource <isParameterPresent > <include refid="sec_resource.Example_Where_Clause" 
+		/> <isNotNull property="orderByClause" > order by $orderByClause$ </isNotNull> 
+		</isParameterPresent> </select> -->
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="sec_resource.Base_Column_List" />
+		from sec_resource
+		where id = #{id:BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from sec_resource
+		where id = #{id:BIGINT}
+	</delete>
+
+</mapper>

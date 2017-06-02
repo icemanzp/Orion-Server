@@ -1,9 +1,8 @@
 package com.jack.netty.test;
 
+import com.jack.netty.Server;
 import junit.framework.TestCase;
 import org.apache.log4j.PropertyConfigurator;
-
-import com.jack.netty.Server;
 
 import java.net.BindException;
 

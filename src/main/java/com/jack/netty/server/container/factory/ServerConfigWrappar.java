@@ -318,7 +318,7 @@ public class ServerConfigWrappar {
             // 5.完成 ServletContext 构建
             sc = wsc;
             // 6.判断启动时是否初始化 Filter
-            if(nsi.getFilterInfos().isOnStartup()){
+            if(nsi.getFilterInfos() != null && nsi.getFilterInfos().isOnStartup()){
             		initialFilter();
             }
         } catch (Exception e) {

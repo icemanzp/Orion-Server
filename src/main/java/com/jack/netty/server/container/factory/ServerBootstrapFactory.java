@@ -32,7 +32,6 @@ public class ServerBootstrapFactory {
                 serverBootstrap.group(new NioEventLoopGroup(), new NioEventLoopGroup());
                 serverBootstrap.channel(NioServerSocketChannel.class);
                 //连接的最大队列长度。如果队列满时收到连接指示，则拒绝该连接
-
                 serverBootstrap.option(ChannelOption.SO_BACKLOG, macCount);
 
                 return serverBootstrap;

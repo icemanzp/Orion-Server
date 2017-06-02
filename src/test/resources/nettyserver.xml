@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<netty-server-info xmlns="http://www.wangfujing.com/nettyserver" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                   xsi:schemaLocation="http://www.wangfujing.com/nettyserver nettyserver.xsd ">
+<netty-server-info xmlns="http://www.jack.com/nettyserver" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.jack.com/nettyserver nettyserver.xsd ">
     <base-info>
         <server-name>netty-test</server-name>
         <server-root>/netty-test</server-root>
@@ -14,7 +14,8 @@
             <keystore-certpasswd>keystore-certpasswd</keystore-certpasswd>
         </ssh-info>
         <base-params>
-            <param param-name="contextConfigLocation" param-value="classpath*:/conf/applicationContext.xml"/>
+            <param param-name="contextConfigLocation" param-value="classpath*:/config/applicationContext.xml,
+            classpath*:/config/springmvc-servlet.xml,classpath*:/config/plusingContext.xml"/>
         </base-params>
     </base-info>
 
@@ -23,21 +24,8 @@
     </listener-infos>
 
     <dispather-infos>
-        <servlet servlet-class="org.springframework.web.servlet.DispatcherServlet" servlet-name="dispatcher"
-                 servlet-suffix="*.htm$,*.json"/>
-        <servlet isSpring="false" servlet-class="org.apache.cxf.transport.servlet.CXFServlet" servlet-name="cxfpathcher"
-                 servlet-suffix="*/webservice/*"/>
+        <servlet servlet-class="org.springframework.web.servlet.DispatcherServlet" servlet-name="dispatcher" servlet-suffix="*.htm$,*.json" />
+        <servlet servlet-class="org.apache.cxf.transport.servlet.CXFServlet" servlet-name="cxfpathcher" servlet-suffix="*/webservice/*" />
     </dispather-infos>
 
-    <monitor-info isDebug="false">
-        <monitor-server>
-            <server-path>192.168.99.100:32770</server-path>
-            <server-timeout>5000</server-timeout>
-            <server-reconnect-count>5</server-reconnect-count>
-        </monitor-server>
-        <count-server acks="1" batch-size="16384" retries="0">
-            <server-path>10.6.2.56:9092,10.6.2.57:9092,10.6.2.58:9092</server-path>
-            <server-topic>sql-info-test</server-topic>
-        </count-server>
-    </monitor-info>
 </netty-server-info>

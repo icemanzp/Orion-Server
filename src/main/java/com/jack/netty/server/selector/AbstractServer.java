@@ -8,6 +8,7 @@
 package com.jack.netty.server.selector;
 
 import io.netty.bootstrap.ServerBootstrap;
+import io.netty.channel.ChannelOption;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -65,9 +66,14 @@ public abstract class AbstractServer {
                         Socket s = ss.accept();
                         Scanner sc = new Scanner(s.getInputStream());
                         String line = sc.nextLine();
-                        if (line.equals(Constant.SYSTEM_SEETING_SERVER_DEFAULT_COMMAND_STOP)) {
+                        if (Constant.SYSTEM_SEETING_SERVER_DEFAULT_COMMAND_STOP.equalsIgnoreCase(line)) {
                             log.info("server is stoping...");
                             shutdown(Constant.SYSTEM_SEETING_PROCESS_RESULT_CODE_STOP);
+                        }else if(line.contains(Constant.SYSTEM_SEETING_SERVER_DEFAULT_COMMAND_MAXCOUNT)){
+                            String[] setCount = line.split(":");
+                            Integer currentCount = setCount.length>1 ? Integer.valueOf(setCount[1]) : Integer.valueOf(Constant.SYSTEM_SEETING_SERVER_DEFAULT_MAX_INCOME_COUNTS);
+                            bootstrap.option(ChannelOption.SO_BACKLOG, currentCount);
+                            log.info("resetting income count to:" + currentCount.toString());
                         }
                     }
                 } catch (Exception e) {

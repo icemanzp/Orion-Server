@@ -18,6 +18,8 @@ public class Constant {
 
     public static String SYSTEM_SEETING_SERVER_DEFAULT_COMMAND_STOP = "stop";
 
+    public static String SYSTEM_SEETING_SERVER_DEFAULT_COMMAND_MAXCOUNT = "setcount";
+
     public static Integer SYSTEM_SEETING_SERVER_DEFAULT_COMMAND_STARTUP_PORT = 1;
 
     public static Integer SYSTEM_SEETING_SERVER_DEFAULT_COMMAND_STARTUP_CPORT = 2;

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.wangfujing.com/nettyserver"
-	xmlns:tns="http://www.wangfujing.com/nettyserver" elementFormDefault="qualified">
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.jack.com/nettyserver"
+	xmlns:tns="http://www.jack.com/nettyserver" elementFormDefault="qualified">
 	
 	<simpleType name="servlet-suffix">
 		<restriction base="string">
