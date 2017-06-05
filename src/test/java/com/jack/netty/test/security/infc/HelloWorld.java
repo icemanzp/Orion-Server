@@ -8,6 +8,7 @@
 package com.jack.netty.test.security.infc;
 
 import javax.jws.WebService;
+import java.util.Map;
 
 /**
  * @Class Name HelloWorld
@@ -16,5 +17,5 @@ import javax.jws.WebService;
  */
 @WebService
 public interface HelloWorld {
-	public String sayHi(String text);
+	public Map<String, Object> sayHi(String text);
 }

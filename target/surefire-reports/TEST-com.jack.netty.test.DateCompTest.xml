@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite failures="0" time="0.028" errors="0" skipped="0" tests="5" name="com.jack.netty.test.DateCompTest">
+<testsuite failures="0" time="0.034" errors="0" skipped="0" tests="5" name="com.jack.netty.test.DateCompTest">
   <properties>
     <property name="idea.version" value="2016.3"/>
     <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
@@ -13,7 +13,7 @@
     <property name="guice.disable.misplaced.annotation.check" value="true"/>
     <property name="java.vm.name" value="Java HotSpot(TM) 64-Bit Server VM"/>
     <property name="file.encoding.pkg" value="sun.io"/>
-    <property name="idea.launcher.port" value="7535"/>
+    <property name="idea.launcher.port" value="7533"/>
     <property name="user.country" value="CN"/>
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="sun.os.patch.level" value="unknown"/>
@@ -65,9 +65,9 @@
     <property name="ftp.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
     <property name="sun.cpu.isalist" value=""/>
   </properties>
-  <testcase time="0.028" classname="com.jack.netty.test.DateCompTest" name="testComp"/>
-  <testcase time="0" classname="com.jack.netty.test.DateCompTest" name="testIPRex"/>
-  <testcase time="0" classname="com.jack.netty.test.DateCompTest" name="testShufix"/>
-  <testcase time="0" classname="com.jack.netty.test.DateCompTest" name="testURI"/>
+  <testcase time="0.032" classname="com.jack.netty.test.DateCompTest" name="testComp"/>
   <testcase time="0" classname="com.jack.netty.test.DateCompTest" name="testString"/>
+  <testcase time="0" classname="com.jack.netty.test.DateCompTest" name="testIPRex"/>
+  <testcase time="0.001" classname="com.jack.netty.test.DateCompTest" name="testShufix"/>
+  <testcase time="0.001" classname="com.jack.netty.test.DateCompTest" name="testURI"/>
 </testsuite>

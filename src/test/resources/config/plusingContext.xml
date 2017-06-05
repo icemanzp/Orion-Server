@@ -2,8 +2,9 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:jaxws="http://cxf.apache.org/jaxws"
+       xmlns:jaxrs="http://cxf.apache.org/jaxrs"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
-          http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd"
+          http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd"
        default-autowire="byName">
 
     <import resource="classpath:META-INF/cxf/cxf.xml"/>
@@ -12,5 +13,19 @@
 
     <bean id="hello" class="com.jack.netty.test.security.controller.HellowWordController"/>
     <jaxws:endpoint id="helloWorld" implementor="#hello" address="/webservice/hw"/>
+
+    <jaxrs:server id="restful" address="/security">
+        <jaxrs:serviceBeans>
+            <ref bean="hellowWordController" />
+        </jaxrs:serviceBeans>
+        <jaxrs:extensionMappings>
+            <entry key="json" value="application/json" />
+            <entry key="xml" value="application/xml" />
+        </jaxrs:extensionMappings>
+        <jaxrs:providers>
+            <bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider"/>
+        </jaxrs:providers>
+    </jaxrs:server>
+    <bean id="hellowWordController" class="com.jack.netty.test.security.controller.HellowWordController" />
 
 </beans>
