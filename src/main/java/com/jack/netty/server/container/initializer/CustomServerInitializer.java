@@ -24,19 +24,16 @@ import java.util.Map.Entry;
 // @DependsOn({"customServerHandler"})
 public class CustomServerInitializer extends AbstractDispatcherChannelInitalizer {
 
-    private LinkedHashMap<String, ChannelHandler> customPipelineMap;
-
-    public CustomServerInitializer(int port, Boolean isssl) throws Exception {
-        super(port, isssl);
+    public CustomServerInitializer(int port, Boolean isSSL) throws Exception {
+        super(port, isSSL);
     }
 
-    public CustomServerInitializer(int port, Boolean isssl, LinkedHashMap<String, ChannelHandler> customPipelineMap)
+    public CustomServerInitializer(int port, Boolean isSSL, LinkedHashMap<String, ChannelHandler> customPipelineMap)
             throws Exception {
-        super(port, isssl);
+        super(port, isSSL);
         while (customPipelineMap.keySet().iterator().hasNext()) {
             String key = customPipelineMap.keySet().iterator().next();
             this.addCustomerPipeline(key, customPipelineMap.get(key));
-            ;
         }
     }
 
@@ -89,15 +86,10 @@ public class CustomServerInitializer extends AbstractDispatcherChannelInitalizer
             }
         }
 
-        pipeline.addLast("httpHandler", new HTTPHandler(servletContext));
     }
 
     public LinkedHashMap<String, ChannelHandler> getCustomPipelineMap() {
         return customPipelineMap;
-    }
-
-    public void setCustomPipelineMap(LinkedHashMap<String, ChannelHandler> customPipelineMap) {
-        this.customPipelineMap = customPipelineMap;
     }
 
 }

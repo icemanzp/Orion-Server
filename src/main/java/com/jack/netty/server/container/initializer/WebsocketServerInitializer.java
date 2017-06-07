@@ -1,5 +1,7 @@
 package com.jack.netty.server.container.initializer;
 
+import com.jack.netty.server.container.factory.ServerConfigWrappar;
+import com.jack.netty.server.securechat.SecureChatSslContextFactory;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
@@ -10,11 +12,6 @@ import io.netty.handler.ssl.SslHandler;
 import io.netty.handler.stream.ChunkedWriteHandler;
 
 import javax.net.ssl.SSLEngine;
-
-import com.jack.netty.server.container.factory.ServerConfigWrappar;
-import com.jack.netty.server.container.handler.WebsocketServerHandler;
-import com.jack.netty.server.securechat.SecureChatSslContextFactory;
-
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -22,10 +19,16 @@ import java.util.Map.Entry;
 
 public class WebsocketServerInitializer extends AbstractDispatcherChannelInitalizer {
 
-    private LinkedHashMap<String, ChannelHandler> customPipelineMap;
-
-    public WebsocketServerInitializer(int port, Boolean isssl) throws Exception {
-        super(port, isssl);
+    public WebsocketServerInitializer(int port, Boolean isSSL) throws Exception {
+        super(port, isSSL);
+    }
+    public WebsocketServerInitializer(int port, Boolean isSSL,
+            LinkedHashMap<String, ChannelHandler> customPipelineMap) throws Exception {
+        super(port, isSSL);
+        while (customPipelineMap.keySet().iterator().hasNext()) {
+            String key = customPipelineMap.keySet().iterator().next();
+            this.addCustomerPipeline(key, customPipelineMap.get(key));
+        }
     }
 
     protected void initChannel(SocketChannel ch) throws Exception {
@@ -59,7 +62,8 @@ public class WebsocketServerInitializer extends AbstractDispatcherChannelInitali
             }
         }
 
-        pipeline.addLast("handler", new WebsocketServerHandler());
+        //通过上面的自定义Pipeline装在后续的处理器完成通信处理，这部分在客户化代码中实现，并通过nettyserver.xml配置
+        //pipeline.addLast("handler", new WebsocketServerHandler());
     }
 
     /**
@@ -67,13 +71,6 @@ public class WebsocketServerInitializer extends AbstractDispatcherChannelInitali
      */
     public LinkedHashMap<String, ChannelHandler> getCustomPipelineMap() {
         return customPipelineMap;
-    }
-
-    /**
-     * @Param LinkedHashMap<String,ChannelHandler> customPipelineMap to set
-     */
-    public void setCustomPipelineMap(LinkedHashMap<String, ChannelHandler> customPipelineMap) {
-        this.customPipelineMap = customPipelineMap;
     }
 
 }

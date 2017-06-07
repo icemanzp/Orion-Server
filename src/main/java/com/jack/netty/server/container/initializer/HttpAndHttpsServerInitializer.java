@@ -29,23 +29,22 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 /**
- * @Class Name HttpAndHttpsDispatcherChannelInitializer
+ * @Class Name HttpAndHttpsServerInitializer
  * @Author Jack
  * @Create In 2015年9月8日
  */
-public class HttpAndHttpsDispatcherChannelInitializer extends AbstractDispatcherChannelInitalizer {
+public class HttpAndHttpsServerInitializer extends AbstractDispatcherChannelInitalizer {
 
-    public HttpAndHttpsDispatcherChannelInitializer(int port, Boolean isssl) throws Exception {
-        super(port, isssl);
+    public HttpAndHttpsServerInitializer(int port, Boolean isSSL) throws Exception {
+        super(port, isSSL);
     }
 
-    public HttpAndHttpsDispatcherChannelInitializer(int port, Boolean isssl,
+    public HttpAndHttpsServerInitializer(int port, Boolean isSSL,
             LinkedHashMap<String, ChannelHandler> customPipelineMap) throws Exception {
-        super(port, isssl);
+        super(port, isSSL);
         while (customPipelineMap.keySet().iterator().hasNext()) {
             String key = customPipelineMap.keySet().iterator().next();
             this.addCustomerPipeline(key, customPipelineMap.get(key));
-            ;
         }
     }
 
@@ -100,4 +99,10 @@ public class HttpAndHttpsDispatcherChannelInitializer extends AbstractDispatcher
 
     }
 
+    /**
+     * @Return the LinkedHashMap<String,ChannelHandler> customPipelineMap
+     */
+    public LinkedHashMap<String, ChannelHandler> getCustomPipelineMap() {
+        return customPipelineMap;
+    }
 }

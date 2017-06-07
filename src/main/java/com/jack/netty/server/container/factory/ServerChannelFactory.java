@@ -4,8 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.jack.netty.server.container.initializer.CustomServerInitializer;
-import com.jack.netty.server.container.initializer.HttpAndHttpsDispatcherChannelInitializer;
-import com.jack.netty.server.container.initializer.TcpServerInitializer;
+import com.jack.netty.server.container.initializer.HttpAndHttpsServerInitializer;
+import com.jack.netty.server.container.initializer.TcpAndTlsServerInitializer;
 import com.jack.netty.server.container.initializer.WebsocketServerInitializer;
 import com.jack.netty.server.dto.ProtocolType;
 import com.jack.netty.server.dto.StartupInfo;
@@ -17,10 +17,30 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 
+/**
+ * @Package com.jack.netty.server.container.factory
+ * @Class Name ServerChannelFactory
+ * @Description
+ * <p> 服务器启动选择器 </p>
+ *
+ * Create In 2017/6/7 By Jack
+**/
 public class ServerChannelFactory {
 
     private static Logger log = LoggerFactory.getLogger(ServerChannelFactory.class);
 
+    /**
+     * @Methods Name createAcceptorChannel
+     * @Description:
+     * <p> 创建可允许启动服务 </p>
+     *
+     * @param port 服务端口号
+     * @param channelType  服务接入模式：NIO or OIO
+     * @param protoctoType 服务器模式：Http or Https or Tcp or Tls or Websocket or Customer
+     * @return StartupInfo 服务器实例
+     * @throws RuntimeException
+     * Create In 2017/6/7 By Jack
+    **/
     public static StartupInfo createAcceptorChannel(int port, int channelType, String protoctoType) throws RuntimeException {
         try {
             final ServerBootstrap serverBootstrap = ServerBootstrapFactory.createServerBootstrap(channelType);
@@ -48,13 +68,13 @@ public class ServerChannelFactory {
             throws Exception {
         switch (protoctoType) {
             case ProtocolType.HTTP:
-                return new HttpAndHttpsDispatcherChannelInitializer(port, false);
+                return new HttpAndHttpsServerInitializer(port, false);
 
             case ProtocolType.HTTPS:
-                return new HttpAndHttpsDispatcherChannelInitializer(port, true);
+                return new HttpAndHttpsServerInitializer(port, true);
 
             case ProtocolType.TCP:
-                return new TcpServerInitializer(port, false);
+                return new TcpAndTlsServerInitializer(port, false);
 
             case ProtocolType.CUSTOM:
                 return new CustomServerInitializer(port, false);
@@ -63,7 +83,7 @@ public class ServerChannelFactory {
                 return new WebsocketServerInitializer(port, false);
 
             default:
-                return new HttpAndHttpsDispatcherChannelInitializer(port, false);
+                return new HttpAndHttpsServerInitializer(port, false);
         }
 
     }

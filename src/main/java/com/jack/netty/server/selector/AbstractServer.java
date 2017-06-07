@@ -59,7 +59,7 @@ public abstract class AbstractServer {
         Thread t = new Thread(new Runnable() {
             public void run() {
                 try {
-                    log.info("server listen to control port " + cport);
+                    log.info("Orion Server Listen To Control Port " + cport);
                     ServerSocket ss = new ServerSocket(cport);
                     while (true) {
                         Socket s = ss.accept();
@@ -72,11 +72,11 @@ public abstract class AbstractServer {
                             String[] setCount = line.split(":");
                             Integer currentCount = setCount.length>1 ? Integer.valueOf(setCount[1]) : Integer.valueOf(Constant.SYSTEM_SEETING_SERVER_DEFAULT_MAX_INCOME_COUNTS);
                             bootstrap.option(ChannelOption.SO_BACKLOG, currentCount);
-                            log.info("resetting income count to:" + currentCount.toString());
+                            log.info("Orion Server Resetting Income Count to:" + currentCount.toString());
                         }
                     }
                 } catch (Exception e) {
-                    log.error("listen to control port fail", e);
+                    log.error("Orion Server Listen To Control Port Fail", e);
                     shutdown(Constant.SYSTEM_SEETING_PROCESS_RESULT_CODE_EXIT);
                 }
             }

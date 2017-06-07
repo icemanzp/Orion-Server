@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="EclipseCodeFormatter">
+    <option name="defaultSettings" value="true" />
+    <option name="formatter" value="ECLIPSE" />
+    <option name="id" value="1496835457252" />
+    <option name="name" value="default" />
+    <option name="pathToConfigFileJava" value="$PROJECT_DIR$/../../../快盘/备份/Documents/我的工作/IBM/01-百联/02-项目执行/00-模板/代码注释及格式模板/codeFormate.xml" />
+    <option name="selectedJavaProfile" value="My_Code_Formatter" />
+  </component>
   <component name="MavenProjectsManager">
     <option name="originalFiles">
       <list>
@@ -11,7 +19,7 @@
     <option name="bndAutoImport" value="true" />
     <option name="bundlesOutputPath" value="/private/var/folders/qc/vj4yxwfn3j500rrpvbffv0700000gn/T" />
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_7" default="true" project-jdk-name="1.7" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_3" default="false" project-jdk-name="1.7" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/classes" />
   </component>
 </project>
