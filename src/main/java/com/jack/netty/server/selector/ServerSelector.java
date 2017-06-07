@@ -23,11 +23,11 @@ public class ServerSelector {
         switch (pt) {
             case ProtocolType.HTTP:
                 ServerConfigWrappar.init(true);
-                return new HTTPServer(port, cport);
+                return new HttpAndHttpsServer(port, cport, false);
 
             case ProtocolType.HTTPS:
                 ServerConfigWrappar.init(true);
-                return new HTTPSServer(port, cport);
+                return new HttpAndHttpsServer(port, cport, true);
 
             case ProtocolType.TCP:
                 ServerConfigWrappar.init(false);
@@ -35,7 +35,7 @@ public class ServerSelector {
 
             case ProtocolType.TLS:
                 ServerConfigWrappar.init(true);
-                return new HTTPSServer(port, cport);
+                return null;
 
             case ProtocolType.WEBSOCKET:
                 return null;
@@ -45,7 +45,7 @@ public class ServerSelector {
 
             default:
                 ServerConfigWrappar.init(true);
-                return new HTTPServer(port, cport);
+                return new HttpAndHttpsServer(port, cport, false);
         }
     }
 

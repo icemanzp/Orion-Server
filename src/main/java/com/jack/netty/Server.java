@@ -72,11 +72,7 @@ public class Server implements IServer {
     }
 
     /**
-     * 服务器默认启动方法，Spring配置文件执行默认方案 默认方案如下：
-     * <p>
-     * Spring配置文件默认位置是：Classpath根目录
-     * ApplicationContext的默认名称是：applicationContext.xml
-     * MVCContext的默认名称是：springmvc-servlet.xml
+     * 服务器默认启动方法
      *
      * @throws Exception void
      * @Methods Name run

@@ -5,7 +5,7 @@
  * @Create In 2015年9月8日 下午6:44:43
  * TODO
  */
-package com.jack.netty.server.container.handler;
+package com.jack.netty.test.handler;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
