@@ -29,8 +29,6 @@ import com.jack.netty.server.dto.StartupInfo;
  */
 public class HTTPSServer extends AbstractServer implements com.jack.netty.server.infc.IServer {
 
-    private HttpAndHttpsDispatcherChannelInitializer childHandler;
-
     public HTTPSServer(int port, int cport) {
         super(port, cport, true);
     }
@@ -54,14 +52,14 @@ public class HTTPSServer extends AbstractServer implements com.jack.netty.server
      * @Methods Name buildChannelFuture
      * @Create In 2015年8月25日 By Jack
      */
-    private void buildChannelFuture() throws Exception, InterruptedException {
+    private void buildChannelFuture() throws Exception {
 
         // 1. 启动监控借口
         listenCtrl();
 
         // 2.初始化服务器
         StartupInfo siInfo = ServerChannelFactory
-                .createAcceptorChannel(port, cport, ChannelType.NIO, ProtocolType.HTTPS);
+                .createAcceptorChannel(port, ChannelType.NIO, ProtocolType.HTTPS);
         this.bootstrap = siInfo.getBootstrap();
         this.childHandler = (HttpAndHttpsDispatcherChannelInitializer) siInfo.getChildHandler();
 

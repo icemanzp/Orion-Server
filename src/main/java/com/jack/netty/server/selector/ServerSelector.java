@@ -7,6 +7,7 @@
  */
 package com.jack.netty.server.selector;
 
+import com.jack.netty.server.container.factory.ServerConfigWrappar;
 import com.jack.netty.server.dto.ProtocolType;
 import com.jack.netty.server.infc.IServer;
 
@@ -17,19 +18,23 @@ import com.jack.netty.server.infc.IServer;
  */
 public class ServerSelector {
 
-    public static IServer initServer(int port, int cport, String pt) {
+    public static IServer initServer(int port, int cport, String pt) throws Exception {
 
         switch (pt) {
             case ProtocolType.HTTP:
+                ServerConfigWrappar.init(true);
                 return new HTTPServer(port, cport);
 
             case ProtocolType.HTTPS:
+                ServerConfigWrappar.init(true);
                 return new HTTPSServer(port, cport);
 
             case ProtocolType.TCP:
+                ServerConfigWrappar.init(false);
                 return null;
 
             case ProtocolType.TLS:
+                ServerConfigWrappar.init(true);
                 return new HTTPSServer(port, cport);
 
             case ProtocolType.WEBSOCKET:
@@ -39,6 +44,7 @@ public class ServerSelector {
                 return null;
 
             default:
+                ServerConfigWrappar.init(true);
                 return new HTTPServer(port, cport);
         }
     }

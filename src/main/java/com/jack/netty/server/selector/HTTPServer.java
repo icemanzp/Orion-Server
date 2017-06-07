@@ -1,13 +1,13 @@
 package com.jack.netty.server.selector;
 
-import java.util.concurrent.atomic.AtomicLong;
-
 import com.jack.netty.conf.util.EnvPropertyConfig;
 import com.jack.netty.server.container.factory.ServerChannelFactory;
 import com.jack.netty.server.container.initializer.HttpAndHttpsDispatcherChannelInitializer;
 import com.jack.netty.server.dto.ChannelType;
 import com.jack.netty.server.dto.ProtocolType;
 import com.jack.netty.server.dto.StartupInfo;
+
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * server
@@ -64,7 +64,7 @@ public class HTTPServer extends AbstractServer implements com.jack.netty.server.
 
         // 2.初始化服务器
         StartupInfo siInfo = ServerChannelFactory
-                .createAcceptorChannel(port, cport, ChannelType.NIO, ProtocolType.HTTP);
+                .createAcceptorChannel(port, ChannelType.NIO, ProtocolType.HTTP);
         this.bootstrap = siInfo.getBootstrap();
         this.childHandler = (HttpAndHttpsDispatcherChannelInitializer) siInfo.getChildHandler();
 

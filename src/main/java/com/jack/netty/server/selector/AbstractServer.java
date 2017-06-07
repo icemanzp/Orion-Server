@@ -7,14 +7,13 @@
  */
 package com.jack.netty.server.selector;
 
+import com.jack.netty.conf.Constant;
+import com.jack.netty.server.container.factory.ServerConfigWrappar;
 import io.netty.bootstrap.ServerBootstrap;
+import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.jack.netty.conf.Constant;
-import com.jack.netty.server.container.factory.ServerConfigWrappar;
-import com.jack.netty.server.container.initializer.HttpAndHttpsDispatcherChannelInitializer;
 
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -34,7 +33,7 @@ public abstract class AbstractServer {
     protected final Boolean isSSL;
 
     protected ServerBootstrap bootstrap;
-    protected HttpAndHttpsDispatcherChannelInitializer childHandler;
+    protected ChannelInitializer childHandler;
 
     protected AtomicLong startBeginTime;
     protected AtomicLong startEndTime;
@@ -67,7 +66,7 @@ public abstract class AbstractServer {
                         Scanner sc = new Scanner(s.getInputStream());
                         String line = sc.nextLine();
                         if (Constant.SYSTEM_SEETING_SERVER_DEFAULT_COMMAND_STOP.equalsIgnoreCase(line)) {
-                            log.info("server is stoping...");
+                            log.info("Orion Server Is Stoping...");
                             shutdown(Constant.SYSTEM_SEETING_PROCESS_RESULT_CODE_STOP);
                         }else if(line.contains(Constant.SYSTEM_SEETING_SERVER_DEFAULT_COMMAND_MAXCOUNT)){
                             String[] setCount = line.split(":");
@@ -81,7 +80,7 @@ public abstract class AbstractServer {
                     shutdown(Constant.SYSTEM_SEETING_PROCESS_RESULT_CODE_EXIT);
                 }
             }
-        }, "netty-wfj-server-ctrl-thread");
+        }, "orion-server-ctrl-thread");
         t.start();
     }
 
@@ -97,12 +96,12 @@ public abstract class AbstractServer {
         //1.停止处理容器
         ServerConfigWrappar.destroy();
         //2.停止服务器
-        log.info("server is stoped...");
+        log.info("Orion Server Is Stoped...");
         System.exit(code);
     }
 
 
-    public HttpAndHttpsDispatcherChannelInitializer getDispatcherServletChannelInitializer() {
+    public ChannelInitializer getDispatcherServletChannelInitializer() {
         return childHandler;
     }
 

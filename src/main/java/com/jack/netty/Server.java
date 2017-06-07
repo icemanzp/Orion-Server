@@ -68,7 +68,6 @@ public class Server implements IServer {
      */
     private void initServer(int port, int cport, String pt) throws Exception {
         System.setProperty(Constant.SYSTEM_SEETING_SERVER_DEFAULT_SERVER_PORT, String.valueOf(port));
-        ServerConfigWrappar.init();
         currentServer = ServerSelector.initServer(port, cport, pt);
     }
 

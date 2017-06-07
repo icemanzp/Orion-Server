@@ -21,8 +21,7 @@ public class ServerChannelFactory {
 
     private static Logger log = LoggerFactory.getLogger(ServerChannelFactory.class);
 
-    public static StartupInfo createAcceptorChannel(int port, int cport, int channelType,
-            String protoctoType) throws RuntimeException {
+    public static StartupInfo createAcceptorChannel(int port, int channelType, String protoctoType) throws RuntimeException {
         try {
             final ServerBootstrap serverBootstrap = ServerBootstrapFactory.createServerBootstrap(channelType);
             final ChannelInitializer<SocketChannel> childHandler = getChannelInitializer(port, protoctoType);

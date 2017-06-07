@@ -223,16 +223,14 @@ public class ServerConfigWrappar {
     }
 
     /**
-     * 服务器容器初始化
-     *
-     * @throws Exception void
-     * @Methods Name init
-     * @Create In 2016年8月2日 By Jack
+     * 根据 nettyserver.xml，构建服务器配置文件实例
+     * @Methods Name buildServerConfig
+     * @return 成功：true；失败：false
+     * @Create In 2017年6月07日 By Jack
      */
-    public static void init() throws Exception {
-
+    private static boolean buildServerConfig() {
         JAXBContext jc;
-        boolean isInitError = false;
+        boolean isInited = false;
         try {
             //1.初始化系统资源文件
             EnvPropertyConfig.init();
@@ -244,22 +242,38 @@ public class ServerConfigWrappar {
                     .getResourceAsStream(PROPERTY_CONTEXT_PATH_CUSTOMER);
 
             nsi = (NettyServerInfo) u.unmarshal(in);
-
             in.close();
-            //3.开始分步骤初始化应用
-            createServletContext();
-
+            isInited = true;
         } catch (Exception e) {
             // TODO Auto-generated catch block
             logger.error(EnvPropertyConfig.getContextProperty("env.setting.server.error.00000000"));
             logger.error("Details: " + e.getMessage());
             e.printStackTrace();
-            isInitError = true;
+            isInited = false;
         }
+        return isInited;
+    }
 
-        if (isInitError) {
+    /**
+     * 服务器容器初始化
+     *
+     * @Methods Name init
+     * @param isHttp 是否 Http|Https 服务器
+     * @throws Exception
+     * @Create In 2017年6月07日 By Jack
+     */
+    public static void init(boolean isHttp) throws Exception{
+        //1.构建服务器配置实例
+        if (!buildServerConfig()) {
             throw new RuntimeException(
                     EnvPropertyConfig.getContextProperty("env.setting.server.error.00000000"));
+        }
+        if(isHttp){
+            //2.开始分步骤初始化应用
+            createHttpModeServer();
+        }else{
+            //2.开始分步骤初始化应用非 Http 类型服务器
+            createTcpModeServer();
         }
     }
 
@@ -274,7 +288,7 @@ public class ServerConfigWrappar {
     public static NettyServerInfo getNettyServerInfo() {
         if (nsi == null) {
             try {
-                init();
+                buildServerConfig();
             } catch (Exception e) {
                 // TODO Auto-generated catch block
                 logger.error(
@@ -287,13 +301,40 @@ public class ServerConfigWrappar {
     }
 
     /**
-     * 获取 Servlet Context
+     * 初始化 TCP 类型的服务器
+     *
+     * @Methods Name createTcpModeServer
+     * @Create In 2017年6月07日 By Jack
+     */
+    private static void createTcpModeServer(){
+        try {
+            // 0.初始化服务器信息，并初始化 ServletContext
+            NettyServerInfo nsi = getNettyServerInfo();
+            WFJServletContext wsc = new WFJServletContext(nsi.getBaseInfo().getServerRoot());
+            wsc.setServletContextName(nsi.getBaseInfo().getServerName());
+            wsc.setContextPath(nsi.getBaseInfo().getServerRoot());
+            wsc.setServerInfo(EnvPropertyConfig.getContextProperty(Constant.SYSTEM_SEETING_SERVER_DEFALUT_NAME) +
+                    Constant.SYSTEM_SEETING_SERVER_DEFALUT_NAME_VERSION_SPLIT +
+                    EnvPropertyConfig.getContextProperty(Constant.SYSTEM_SEETING_SERVER_DEFALUT_VERSION));
+            // 1.初始化 Context 参数
+            buildContextParams(nsi, wsc);
+            // 2.初始化监听器
+            buildListener(nsi, wsc);
+
+        } catch (Exception e) {
+            throw new RuntimeException(
+                    EnvPropertyConfig.getContextProperty("env.setting.server.error.00000000"));
+        }
+    }
+
+    /**
+     * 创建 Http 类型的服务器
      *
      * @return ServletContext
-     * @Methods Name createServletContext
+     * @Methods Name createHttpModeServer
      * @Create In 2016年5月1日 By Jack
      */
-    private static ServletContext createServletContext() {
+    private static ServletContext createHttpModeServer() {
 
         if (sc != null) {
             return sc;
@@ -555,7 +596,7 @@ public class ServerConfigWrappar {
         if (sc != null) {
             return sc;
         } else {
-            return createServletContext();
+            return createHttpModeServer();
         }
     }
 
