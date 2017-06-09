@@ -3,9 +3,6 @@
  */
 package com.jack.netty.server.container.factory;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.jack.netty.conf.Constant;
 import com.jack.netty.conf.util.EnvPropertyConfig;
 import com.jack.netty.server.config.NettyServerInfo;
@@ -17,11 +14,15 @@ import com.jack.netty.server.config.NettyServerInfo.ListenerInfos.Listener;
 import com.jack.netty.server.servlet.*;
 import com.jack.netty.util.ObjectUtils;
 import com.jack.netty.util.StringUtils;
+import io.netty.channel.ChannelHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.*;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
 import java.io.InputStream;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URLDecoder;
@@ -51,6 +52,8 @@ public class ServerConfigWrappar {
     private final static Map<Class<?>, AnnotationCacheEntry[]> annotationCache = new WeakHashMap<>();
 
     public static final boolean IS_SECURITY_ENABLED = (System.getSecurityManager() != null);
+
+    private final static LinkedHashMap<String, ChannelHandler> customPipelineMap = new LinkedHashMap<String, ChannelHandler>();
 
     private static enum AnnotationCacheEntryType {
         FIELD, SETTER, POST_CONSTRUCT, PRE_DESTROY
@@ -320,10 +323,12 @@ public class ServerConfigWrappar {
             buildContextParams(nsi, wsc);
             // 2.初始化监听器
             buildListener(nsi, wsc);
+            // 3.构造自定义处理器，完成后续任务处理
+            buildCustomerHandler(nsi);
 
         } catch (Exception e) {
             throw new RuntimeException(
-                    EnvPropertyConfig.getContextProperty("env.setting.server.error.00000000"));
+                    EnvPropertyConfig.getContextProperty("env.setting.server.error.00000000"),e);
         }
     }
 
@@ -364,10 +369,58 @@ public class ServerConfigWrappar {
             }
         } catch (Exception e) {
             throw new RuntimeException(
-                    EnvPropertyConfig.getContextProperty("env.setting.server.error.00000000"));
+                    EnvPropertyConfig.getContextProperty("env.setting.server.error.00000000"), e);
         }
 
         return sc;
+    }
+
+    /**
+    * @Description:
+    * <p> 构建自定义处理器，应用于 TCP、TLS 类型的服务启动的执行支持 </p>
+    *
+    * @Methods Name buildCustomerHandler
+    * @param nsi
+    * @throws
+    * @return
+    * @Create In 2017/6/9 By Jack
+    **/
+    private static void buildCustomerHandler(NettyServerInfo nsi){
+        if (nsi.getHandlerInfos() == null || nsi.getHandlerInfos().getHandler() == null){
+            return ;
+        }
+        Iterator handlers = nsi.getHandlerInfos().getHandler().iterator();
+        try {
+            while (handlers.hasNext()) {
+                NettyServerInfo.HandlerInfos.Handler item = (NettyServerInfo.HandlerInfos.Handler) handlers.next();
+                Class clazz = Class.forName(item.getHandlerClass());
+                if (item.getConstruction() != null) {
+                    NettyServerInfo.HandlerInfos.Handler.Construction construct = item.getConstruction();
+                    if (construct.isParams() && construct.getArgs() != null) {
+                        Iterator args = construct.getArgs().getArg().iterator();
+                        List<Class> clsArgs = new ArrayList<Class>();
+                        List<Object> clsArgValue = new ArrayList<Object>();
+                        while (args.hasNext()) {
+                            NettyServerInfo.HandlerInfos.Handler.Construction.Args.Arg argItem = (NettyServerInfo.HandlerInfos.Handler.Construction.Args.Arg)args.next();
+                            clsArgs.add(Class.forName(argItem.getKey()));
+                            clsArgValue.add(argItem.getValue());
+                        }
+                        Class[] paramsType = new Class[clsArgs.size()];
+                        clsArgs.toArray(paramsType);
+                        Constructor conn = clazz.getConstructor(paramsType);
+                        customPipelineMap.put(item.getName(), (ChannelHandler)conn.newInstance(clsArgValue.toArray()));
+                    }else{
+                        Constructor conn = clazz.getConstructor();
+                        customPipelineMap.put(item.getName(),(ChannelHandler)conn.newInstance());
+                    }
+                } else {
+                    customPipelineMap.put(item.getName(), (ChannelHandler)clazz.newInstance());
+                }
+            }
+        }catch (Exception e){
+            throw new RuntimeException(
+                    EnvPropertyConfig.getContextProperty("env.setting.server.error.00001019"), e);
+        }
     }
     
     /**
@@ -376,10 +429,10 @@ public class ServerConfigWrappar {
      * @Create In 2016年9月13日 By Jack void
      */
     private static void initialFilter(){
-    		Iterator<String> filters = ((WFJServletContext)sc).getFilterRegistrations().keySet().iterator();
-    		while(filters.hasNext()){
-    			((WFJServletContext)sc).getFilter(filters.next());
-    		}
+        Iterator<String> filters = ((WFJServletContext)sc).getFilterRegistrations().keySet().iterator();
+        while(filters.hasNext()){
+            ((WFJServletContext)sc).getFilter(filters.next());
+        }
     }
 
     /**
@@ -432,7 +485,7 @@ public class ServerConfigWrappar {
             } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
                 // TODO Auto-generated catch block
                 throw new RuntimeException(
-                        EnvPropertyConfig.getContextProperty("env.setting.server.error.00000000"));
+                        EnvPropertyConfig.getContextProperty("env.setting.server.error.00000000"), e);
             }
         }
 
@@ -819,5 +872,17 @@ public class ServerConfigWrappar {
                 }
             }
         }
+    }
+
+    /**
+    * @Description:
+    * <p> 返回定义的 CustomerHandler List </p>
+    *
+    * @Methods Name getCustomerPipline
+    * @return LinkedHashMap<String, ChannelHandler>
+    * @Create In 2017/6/9 By Jack
+    **/
+    public LinkedHashMap<String, ChannelHandler> getCustomerPipline(){
+            return customPipelineMap;
     }
 }

@@ -28,4 +28,13 @@
         <servlet servlet-class="org.apache.cxf.transport.servlet.CXFServlet" servlet-name="cxfpathcher" servlet-suffix="*/webservice/*,*/security/*" />
     </dispather-infos>
 
+    <handler-infos>
+        <handler name="" handler-class="">
+            <construction name="">
+                <args>
+                    <arg/>
+                </args>
+            </construction>
+        </handler>
+    </handler-infos>
 </netty-server-info>
