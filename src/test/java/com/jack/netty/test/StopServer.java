@@ -16,7 +16,7 @@ public class StopServer extends TestCase {
     public void testStop() {
         Socket s;
         try {
-            s = new Socket("localhost", 8090);
+            s = new Socket("localhost", 8083);
             PrintWriter w = new PrintWriter(s.getOutputStream());
             w.println("stop");
             w.flush();
