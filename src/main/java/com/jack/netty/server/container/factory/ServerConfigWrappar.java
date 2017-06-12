@@ -882,7 +882,7 @@ public class ServerConfigWrappar {
     * @return LinkedHashMap<String, ChannelHandler>
     * @Create In 2017/6/9 By Jack
     **/
-    public LinkedHashMap<String, ChannelHandler> getCustomerPipline(){
+    public static LinkedHashMap<String, ChannelHandler> getCustomerPipline(){
             return customPipelineMap;
     }
 }

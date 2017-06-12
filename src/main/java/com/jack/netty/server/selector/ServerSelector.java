@@ -31,11 +31,11 @@ public class ServerSelector {
 
             case ProtocolType.TCP:
                 ServerConfigWrappar.init(false);
-                return null;
+                return new TcpAndTlsServer(port, cport, false);
 
             case ProtocolType.TLS:
                 ServerConfigWrappar.init(true);
-                return null;
+                return new TcpAndTlsServer(port, cport, true);
 
             case ProtocolType.WEBSOCKET:
                 return null;

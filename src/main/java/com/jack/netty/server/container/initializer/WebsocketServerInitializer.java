@@ -21,6 +21,11 @@ public class WebsocketServerInitializer extends AbstractDispatcherChannelInitali
 
     public WebsocketServerInitializer(int port, Boolean isSSL) throws Exception {
         super(port, isSSL);
+        Iterator handlers = ServerConfigWrappar.getCustomerPipline().keySet().iterator();
+        while(handlers.hasNext()){
+            String key = (String)handlers.next();
+            this.addCustomerPipeline(key, ServerConfigWrappar.getCustomerPipline().get(key));
+        }
     }
     public WebsocketServerInitializer(int port, Boolean isSSL,
             LinkedHashMap<String, ChannelHandler> customPipelineMap) throws Exception {

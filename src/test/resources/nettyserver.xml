@@ -29,12 +29,6 @@
     </dispather-infos>
 
     <handler-infos>
-        <handler name="" handler-class="">
-            <construction name="">
-                <args>
-                    <arg/>
-                </args>
-            </construction>
-        </handler>
+        <handler name="tcpHandler" handler-class="com.jack.netty.test.handler.TCPSHandler" />
     </handler-infos>
 </netty-server-info>

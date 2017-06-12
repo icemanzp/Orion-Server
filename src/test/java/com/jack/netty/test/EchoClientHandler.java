@@ -1,31 +1,34 @@
-/**
- * @Probject Name: netty-wfj-server
- * @Path: com.jack.netty.server.container.handlerTCPSHandler.java
- * @Create By Jack
- * @Create In 2015年9月8日 下午6:44:43
- * TODO
- */
-package com.jack.netty.test.handler;
+package com.jack.netty.test;
 
-import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * @Class Name TCPSHandler
- * @Author Jack
- * @Create In 2015年9月8日
+ * Created by Jack on 2017/6/12.
  */
-@ChannelHandler.Sharable
-public class TCPSHandler extends ChannelInboundHandlerAdapter {
-
+public class EchoClientHandler extends ChannelInboundHandlerAdapter {
     private Logger log = LoggerFactory.getLogger(this.getClass());
+    private final String firstMessage;
+
+    /**
+     * Creates a client-side handler.
+     */
+    public EchoClientHandler() {
+        firstMessage = String.valueOf("发送测试数据");
+
+    }
+
+    @Override
+    public void channelActive(ChannelHandlerContext ctx) {
+        log.info("Client 发送到消息:" + firstMessage);
+        ctx.writeAndFlush(firstMessage);
+    }
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
-        log.info("SERVER接收到消息:" + msg);
+        log.info("Client 接收到消息:" + msg);
         ctx.write(msg);
     }
 
@@ -41,10 +44,4 @@ public class TCPSHandler extends ChannelInboundHandlerAdapter {
         cause.printStackTrace();
         ctx.close();
     }
-
-
-    public TCPSHandler(){
-        log.info("初始化 TCPHandler Test处理器");
-    }
-
 }
