@@ -1,6 +1,7 @@
 package com.jack.netty.server.container.initializer;
 
 import com.jack.netty.server.container.factory.ServerConfigWrappar;
+import com.jack.netty.server.container.handler.TCPSHandler;
 import com.jack.netty.server.securechat.SecureChatSslContextFactory;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelPipeline;
@@ -27,6 +28,12 @@ public class TcpAndTlsServerInitializer extends AbstractDispatcherChannelInitali
 
     public TcpAndTlsServerInitializer(int port, Boolean isSSL) throws Exception {
         super(port, isSSL);
+        Iterator<String> handlers = ServerConfigWrappar.getCustomerPipline().keySet().iterator();
+        while(handlers.hasNext()){
+            String key = handlers.next();
+            this.addCustomerPipeline(key, ServerConfigWrappar.getCustomerPipline().get(key));
+        }
+
     }
     public TcpAndTlsServerInitializer(int port, Boolean isSSL,
             LinkedHashMap<String, ChannelHandler> customPipelineMap) throws Exception {
@@ -57,6 +64,7 @@ public class TcpAndTlsServerInitializer extends AbstractDispatcherChannelInitali
             engine.setEnabledProtocols(new String[]{"SSLv3"});
             pipeline.addLast("ssl", new SslHandler(engine));
         }
+
         pipeline.addLast("frameDecoder", new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 0, 4, 0, 4));
         pipeline.addLast("frameEncoder", new LengthFieldPrepender(4));
         pipeline.addLast("decoder", new StringDecoder(CharsetUtil.UTF_8));
@@ -72,7 +80,7 @@ public class TcpAndTlsServerInitializer extends AbstractDispatcherChannelInitali
             }
         }
         //通过上面的自定义Pipeline装在后续的处理器完成通信处理，这部分在客户化代码中实现，并通过nettyserver.xml配置
-        //pipeline.addLast(new TCPSHandler());
+        pipeline.addLast(new TCPSHandler());
     }
 
     public LinkedHashMap<String, ChannelHandler> getCustomPipelineMap() {

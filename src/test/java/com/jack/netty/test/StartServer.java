@@ -23,7 +23,7 @@ public class StartServer extends TestCase {
         System.out.println("Hello World! Netty Startup!");
         PropertyConfigurator.configure("target/test-classes/config/log4j.properties");
 
-        Server server = new Server(8090, 8083, "HTTP");
+        Server server = new Server(8090, 8083, "TCP");
         try {
             server.run();
         } catch (BindException e) {

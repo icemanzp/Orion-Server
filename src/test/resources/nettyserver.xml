@@ -28,4 +28,7 @@
         <servlet servlet-class="org.apache.cxf.transport.servlet.CXFServlet" servlet-name="cxfpathcher" servlet-suffix="*/webservice/*,*/security/*" />
     </dispather-infos>
 
+    <handler-infos>
+        <handler name="tcpHandler" handler-class="com.jack.netty.test.handler.TCPSHandler" />
+    </handler-infos>
 </netty-server-info>
