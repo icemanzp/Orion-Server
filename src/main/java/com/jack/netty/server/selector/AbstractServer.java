@@ -9,6 +9,7 @@ package com.jack.netty.server.selector;
 
 import com.jack.netty.conf.Constant;
 import com.jack.netty.server.container.factory.ServerConfigWrappar;
+import com.jack.netty.server.dto.StartupInfo;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
@@ -31,9 +32,7 @@ public abstract class AbstractServer {
     protected final int port;
     protected final int cport;
     protected final Boolean isSSL;
-
-    protected ServerBootstrap bootstrap;
-    protected ChannelInitializer childHandler;
+    protected StartupInfo siInfo;
 
     protected AtomicLong startBeginTime;
     protected AtomicLong startEndTime;
@@ -71,7 +70,7 @@ public abstract class AbstractServer {
                         }else if(line.contains(Constant.SYSTEM_SEETING_SERVER_DEFAULT_COMMAND_MAXCOUNT)){
                             String[] setCount = line.split(":");
                             Integer currentCount = setCount.length>1 ? Integer.valueOf(setCount[1]) : Integer.valueOf(Constant.SYSTEM_SEETING_SERVER_DEFAULT_MAX_INCOME_COUNTS);
-                            bootstrap.option(ChannelOption.SO_BACKLOG, currentCount);
+                            siInfo.getBootstrap().option(ChannelOption.SO_BACKLOG, currentCount);
                             log.info("Orion Server Resetting Income Count to:" + currentCount.toString());
                         }
                     }
@@ -95,18 +94,22 @@ public abstract class AbstractServer {
     public void shutdown(int code) {
         //1.停止处理容器
         ServerConfigWrappar.destroy();
-        //2.停止服务器
+        //2.停止服务线程池，优雅退出
+        siInfo.getBootstrap().childGroup().shutdownGracefully();
+        siInfo.getBootstrap().group().shutdownGracefully();
+        siInfo.getFuture().channel().close();
+        //3.终止服务器
         log.info("Orion Server Is Stoped...");
         System.exit(code);
     }
 
 
     public ChannelInitializer getDispatcherServletChannelInitializer() {
-        return childHandler;
+        return siInfo.getChildHandler();
     }
 
     public ServerBootstrap getBootstrap() {
-        return bootstrap;
+        return siInfo.getBootstrap();
     }
 
 

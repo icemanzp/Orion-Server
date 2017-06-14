@@ -52,7 +52,7 @@ public class ServerChannelFactory {
             future.addListener(new GenericFutureListener<Future<? super Void>>() {
                 public void operationComplete(Future<? super Void> future) throws Exception {
                     //服务启动成功后
-                    log.info("server heartlive startup secussed.............");
+                    log.info("server heartlive startup secussed............." );
                     log.info("server startup...............");
                 }
             });

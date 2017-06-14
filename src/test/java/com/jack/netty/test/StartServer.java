@@ -1,6 +1,7 @@
 package com.jack.netty.test;
 
 import com.jack.netty.Server;
+import com.jack.netty.server.dto.ProtocolType;
 import junit.framework.TestCase;
 import org.apache.log4j.PropertyConfigurator;
 
@@ -23,7 +24,7 @@ public class StartServer extends TestCase {
         System.out.println("Hello World! Netty Startup!");
         PropertyConfigurator.configure("target/test-classes/config/log4j.properties");
 
-        Server server = new Server(8090, 8083, "TCP");
+        Server server = new Server(8090, 8083, ProtocolType.TCP);
         try {
             server.run();
         } catch (BindException e) {

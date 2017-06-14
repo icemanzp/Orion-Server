@@ -1,7 +1,6 @@
 package com.jack.netty.server.container.initializer;
 
 import com.jack.netty.server.container.factory.ServerConfigWrappar;
-import com.jack.netty.server.container.handler.TCPSHandler;
 import com.jack.netty.server.securechat.SecureChatSslContextFactory;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelPipeline;
@@ -80,7 +79,6 @@ public class TcpAndTlsServerInitializer extends AbstractDispatcherChannelInitali
             }
         }
         //通过上面的自定义Pipeline装在后续的处理器完成通信处理，这部分在客户化代码中实现，并通过nettyserver.xml配置
-        pipeline.addLast(new TCPSHandler());
     }
 
     public LinkedHashMap<String, ChannelHandler> getCustomPipelineMap() {

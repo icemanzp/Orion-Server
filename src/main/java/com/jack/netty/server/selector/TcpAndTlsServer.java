@@ -2,11 +2,10 @@ package com.jack.netty.server.selector;
 
 import com.jack.netty.conf.util.EnvPropertyConfig;
 import com.jack.netty.server.container.factory.ServerChannelFactory;
-import com.jack.netty.server.container.initializer.TcpAndTlsServerInitializer;
 import com.jack.netty.server.dto.ChannelType;
 import com.jack.netty.server.dto.ProtocolType;
-import com.jack.netty.server.dto.StartupInfo;
 import com.jack.netty.server.infc.IServer;
+import io.netty.channel.ChannelOption;
 
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -29,7 +28,7 @@ public class TcpAndTlsServer extends AbstractServer implements IServer {
 	@Override
 	public void run() throws Exception {
 		// 1.根据默认配置启动
-		if (this.bootstrap != null) {
+		if (this.siInfo != null && this.siInfo.getBootstrap() != null) {
 			throw new IllegalStateException(EnvPropertyConfig.getContextProperty("env.setting.server.error.00001001"));
 		}
 
@@ -50,10 +49,11 @@ public class TcpAndTlsServer extends AbstractServer implements IServer {
 		listenCtrl();
 
 		// 2.初始化服务器
-		StartupInfo siInfo = ServerChannelFactory
+		siInfo = ServerChannelFactory
 				.createAcceptorChannel(port, ChannelType.NIO, (isSSL ? ProtocolType.TLS : ProtocolType.TCP));
-		this.bootstrap = siInfo.getBootstrap();
-		this.childHandler = (TcpAndTlsServerInitializer) siInfo.getChildHandler();
+		// 3.TCP 类型设置属性
+		siInfo.getBootstrap().option(ChannelOption.TCP_NODELAY, true);
+		siInfo.getBootstrap().option(ChannelOption.SO_KEEPALIVE, true);
 
 		// 3.记录服务初始化时间，到毫秒
 		this.startEndTime = new AtomicLong(System.currentTimeMillis());

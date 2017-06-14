@@ -2,10 +2,8 @@ package com.jack.netty.server.selector;
 
 import com.jack.netty.conf.util.EnvPropertyConfig;
 import com.jack.netty.server.container.factory.ServerChannelFactory;
-import com.jack.netty.server.container.initializer.HttpAndHttpsServerInitializer;
 import com.jack.netty.server.dto.ChannelType;
 import com.jack.netty.server.dto.ProtocolType;
-import com.jack.netty.server.dto.StartupInfo;
 
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -34,7 +32,7 @@ public class HttpAndHttpsServer extends AbstractServer implements com.jack.netty
 	@Override
 	public void run() throws Exception {
 		// 1.根据默认配置启动
-		if (this.bootstrap != null) {
+		if (this.siInfo != null && this.siInfo.getBootstrap() != null) {
 			throw new IllegalStateException(EnvPropertyConfig.getContextProperty("env.setting.server.error.00001001"));
 		}
 
@@ -56,10 +54,8 @@ public class HttpAndHttpsServer extends AbstractServer implements com.jack.netty
 		listenCtrl();
 
 		// 2.初始化服务器
-		StartupInfo siInfo = ServerChannelFactory
+		siInfo = ServerChannelFactory
 				.createAcceptorChannel(port, ChannelType.NIO, (isSSL ? ProtocolType.HTTPS : ProtocolType.HTTP));
-		this.bootstrap = siInfo.getBootstrap();
-		this.childHandler = (HttpAndHttpsServerInitializer) siInfo.getChildHandler();
 
 		// 3.记录服务初始化时间，到毫秒
 		this.startEndTime = new AtomicLong(System.currentTimeMillis());
