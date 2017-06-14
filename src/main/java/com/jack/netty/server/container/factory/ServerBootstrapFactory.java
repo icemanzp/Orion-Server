@@ -23,7 +23,7 @@ public class ServerBootstrapFactory {
 
         ServerBootstrap serverBootstrap = new ServerBootstrap();
 
-        Integer macCount = ServerConfigWrappar.getNettyServerInfo().getBaseInfo().getMaxIncomeThreadCount() != null ?
+        Integer maxCount = ServerConfigWrappar.getNettyServerInfo().getBaseInfo().getMaxIncomeThreadCount() != null ?
                 ServerConfigWrappar.getNettyServerInfo().getBaseInfo().getMaxIncomeThreadCount()
                         .intValue() : Constant.SYSTEM_SEETING_SERVER_DEFAULT_MAX_INCOME_COUNTS;
 
@@ -32,7 +32,7 @@ public class ServerBootstrapFactory {
                 serverBootstrap.group(new NioEventLoopGroup(), new NioEventLoopGroup());
                 serverBootstrap.channel(NioServerSocketChannel.class);
                 //连接的最大队列长度。如果队列满时收到连接指示，则拒绝该连接
-                serverBootstrap.option(ChannelOption.SO_BACKLOG, macCount);
+                serverBootstrap.option(ChannelOption.SO_BACKLOG, maxCount);
 
                 return serverBootstrap;
 
@@ -40,7 +40,7 @@ public class ServerBootstrapFactory {
                 serverBootstrap.group(new OioEventLoopGroup());
                 serverBootstrap.channel(OioServerSocketChannel.class);
                 //连接的最大队列长度。如果队列满时收到连接指示，则拒绝该连接
-                serverBootstrap.option(ChannelOption.SO_BACKLOG, macCount);
+                serverBootstrap.option(ChannelOption.SO_BACKLOG, maxCount);
 
                 return serverBootstrap;
             default:
