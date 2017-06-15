@@ -6,6 +6,8 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import javax.xml.bind.annotation.XmlTransient;
+
 
 @Repository
 public class RoleDAOImpl implements RoleDAO {
@@ -32,6 +34,7 @@ public class RoleDAOImpl implements RoleDAO {
     		sqlSessionTemplate.insert("sec_role.insertSelective", record);
     }
 
+    @XmlTransient
     public Role selectByPrimaryKey(Long id) {
         Role _key = new Role();
         _key.setId(id);

@@ -1,11 +1,12 @@
 package com.jack.netty.test.security.persist.dao.impl;
 
-;
 import com.jack.netty.test.security.entity.Resource;
 import com.jack.netty.test.security.persist.dao.ResourceDAO;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
+;
 
 @Repository
 public class ResourceDAOImpl implements ResourceDAO {

@@ -8,7 +8,6 @@
 package com.jack.netty.test.security.controller;
 
 
-
 import com.jack.netty.test.security.entity.Role;
 import com.jack.netty.test.security.infc.HelloWorld;
 import com.jack.netty.test.security.service.FindResource;
@@ -29,7 +28,9 @@ import java.util.Map;
  * @Author Jack
  * @Create In 2015年9月16日
  */
-@WebService(endpointInterface = "com.jack.netty.test.security.infc.HelloWorld")
+@WebService(endpointInterface = "com.jack.netty.test.security.infc.HelloWorld",
+        serviceName = "helloWorld",
+        targetNamespace = "http://infc.security.test.netty.jack.com/")
 @Path("/hw")
 public class HellowWordController implements HelloWorld {
 
@@ -39,13 +40,15 @@ public class HellowWordController implements HelloWorld {
 	/* (non-Javadoc)
 	 * @see com.wfj.infc.HelloWorld#sayHi(java.lang.String)
 	 */
-	@GET
-	@Path("/find/role/{id}")
-	@Produces({MediaType.APPLICATION_JSON})
-	public Map<String, Object> sayHi(@PathParam("id") String id) {
-		// TODO Auto-generated method stub
+    @Override
+    @GET
+    @Path("/find/role/{id}")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Map<String, Object> sayHi(@PathParam("id") String id) {
+        // TODO Auto-generated method stub
 		System.out.println("sayHi called");
-		Map<String, Object> res = new HashMap<String, Object>();
+
+        Map<String, Object> res = new HashMap<String, Object>();
 
 		Role role = fr.findRoleByID(Long.valueOf(id).longValue());
 

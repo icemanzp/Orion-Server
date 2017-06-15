@@ -7,6 +7,8 @@
  */
 package com.jack.netty.test.security.infc;
 
+import javax.jws.WebMethod;
+import javax.jws.WebParam;
 import javax.jws.WebService;
 import java.util.Map;
 
@@ -17,5 +19,7 @@ import java.util.Map;
  */
 @WebService
 public interface HelloWorld {
-	public Map<String, Object> sayHi(String text);
+
+	@WebMethod
+	public Map<String, Object> sayHi(@WebParam(name = "id") String id);
 }

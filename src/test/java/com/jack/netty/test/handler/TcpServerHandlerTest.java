@@ -7,12 +7,17 @@
  */
 package com.jack.netty.test.handler;
 
-import io.netty.channel.*;
+import com.jack.netty.test.security.service.FindResource;
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelHandler;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.group.ChannelGroup;
 import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.util.concurrent.GlobalEventExecutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * @Class Name TcpServerHandlerTest
@@ -23,6 +28,9 @@ import org.slf4j.LoggerFactory;
 public class TcpServerHandlerTest extends SimpleChannelInboundHandler<String> {
 
     private Logger log = LoggerFactory.getLogger(this.getClass());
+
+    @Autowired
+    private FindResource fr;
 
     public static ChannelGroup channels = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
 
@@ -51,7 +59,7 @@ public class TcpServerHandlerTest extends SimpleChannelInboundHandler<String> {
             if (channel != incoming){
                 channel.writeAndFlush("[" + incoming.remoteAddress() + "]" + s + "\n");
             } else {
-                channel.writeAndFlush("[you]" + s + "\n");
+                channel.writeAndFlush("[you]" + s + "\n" + fr.findResourceByID(Long.valueOf(2)));
             }
         }
     }
